@@ -12,11 +12,26 @@ datasource db {
   provider = "postgresql"
 }
 
-model User{
-  id          String      @id @default(cuid())
-  email       String      @unique
-  password    String 
-  avatarUrl   String?     @default("/uploads/avatars/users/default.svg")
-  name        String?
-  createdAt   DateTime    @default(now())
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  avatarUrl String?  @default("/uploads/avatars/users/default.svg")
+  name      String?
+  createdAt DateTime @default(now())
+  clients   Client[]
 }
+
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  avatarUrl String?
+  email     String?
+  createdAt DateTime @default(now())
+  company   String?
+  phone     String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+
