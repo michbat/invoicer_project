@@ -12,26 +12,47 @@ datasource db {
   provider = "postgresql"
 }
 
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+}
+
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
   password  String
-  avatarUrl String?  @default("/uploads/avatars/users/default.svg")
+  avatarUrl String?   @default("/uploads/avatars/users/default.svg")
   name      String?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   clients   Client[]
+  invoices  Invoice[]
 }
 
 model Client {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
   avatarUrl String?
   email     String?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   company   String?
   phone     String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invoices  Invoice[]
 }
 
-
+model Invoice {
+  id        String        @id @default(cuid())
+  number    Int
+  status    InvoiceStatus @default(DRAFT)
+  amount    Float
+  dueDate   DateTime
+  createdAt DateTime      @default(now())
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientId  String
+  client    Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  @@unique([userId,number])
+}
