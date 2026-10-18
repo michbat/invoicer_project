@@ -47,3 +47,7 @@ public/uploads/*
 public/*
 
 /app/generated/prisma
+
+# test-db 
+
+test-db.ts
