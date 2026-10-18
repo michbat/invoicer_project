@@ -40,3 +40,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# avatars
+
+public/uploads/*
+public/*
+
+/app/generated/prisma
